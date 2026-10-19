@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taklifnoma | Muqaddasim, munavvarim, ona tilim</title>
+  
+  <!-- Meta tags for social preview (Telegram, WhatsApp) -->
+  <meta property="og:title" content="Taklifnoma: Muqaddasim, munavvarim, ona tilim">
+  <meta property="og:description" content="Hurmatli ustozlar, sizni 20-oktabr soat 11:00 da badiiy kechamizga lutfan taklif etamiz!">
+  <meta name="theme-color" content="#0d2b27">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@500;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome & Canvas Confetti -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-deep: #061715;
+      --bg-card: #0a211e;
+      --gold-primary: #d4af37;
+      --gold-light: #f7e089;
+      --gold-dark: #aa820a;
+      --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+      --gold-glow: 0 0 25px rgba(212, 175, 55, 0.45);
+      --text-light: #f4f6f5;
+      --text-muted: #c4d4cf;
+      --emerald-accent: #0f4039;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-light);
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ambient Canvas Background */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Background Ornaments */
+    .bg-ornament {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16, 68, 59, 0.35) 0%, rgba(6, 23, 21, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(40px);
+    }
+    .bg-ornament-1 { top: -200px; right: -200px; }
+    .bg-ornament-2 { bottom: -200px; left: -200px; }
+
+    /* Audio Control Button (Floating) */
+    .audio-control {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: rgba(10, 33, 30, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5), var(--gold-glow);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .audio-control:hover {
+      transform: scale(1.1) rotate(15deg);
+      border-color: var(--gold-light);
+    }
+    .audio-control.playing {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
+    }
+
+    /* Envelope Overlay Screen (Before Opening) */
+    .envelope-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #0d302a 0%, #051412 100%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: opacity 1s cubic-bezier(0.77, 0, 0.175, 1), visibility 1s;
+    }
+
+    .envelope-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      background: #09231f;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212, 175, 55, 0.25);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      overflow: visible;
+    }
+
+    @media (min-width: 480px) {
+      .envelope-wrapper {
+        width: 380px;
+        height: 250px;
+      }
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 45px rgba(212, 175, 55, 0.4);
+    }
+
+    .envelope-flaps {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .envelope-flap-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      border-top: 110px solid #0f3b35;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-bottom: 0 solid transparent;
+      transform-origin: top;
+      transition: transform 0.8s ease;
+      z-index: 3;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+    }
+    @media (min-width: 480px) {
+      .envelope-flap-top {
+        border-top-width: 125px;
+        border-left-width: 190px;
+        border-right-width: 190px;
+      }
+    }
+
+    .envelope-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 75px;
+      height: 75px;
+      background: radial-gradient(circle, #fcf6ba 10%, #bf953f 60%, #845a16 100%);
+      border-radius: 50%;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 20px rgba(212, 175, 55, 0.6);
+      border: 2px solid #fff2a3;
+      cursor: pointer;
+      transition: transform 0.3s;
+      animation: sealPulse 2.5s infinite ease-in-out;
+    }
+
+    @keyframes sealPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    .envelope-seal i {
+      color: #3d2600;
+      font-size: 24px;
+    }
+
+    .envelope-seal span {
+      font-size: 8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #3d2600;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .envelope-title {
+      margin-top: 35px;
+      text-align: center;
+    }
+
+    .envelope-title h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: var(--gold-light);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    }
+
+    .envelope-title p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .open-btn {
+      margin-top: 25px;
+      background: var(--gold-gradient);
+      color: #241600;
+      border: none;
+      padding: 13px 34px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(191, 149, 63, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+
+    .open-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(252, 246, 186, 0.6);
+    }
+
+    /* Main Container (Invitation Card) */
+    .main-container {
+      width: 100%;
+      max-width: 760px;
+      padding: 40px 20px 80px;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card {
+      background: linear-gradient(170deg, rgba(13, 38, 34, 0.94) 0%, rgba(6, 21, 19, 0.96) 100%);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), inset 0 0 30px rgba(212, 175, 55, 0.08);
+      position: relative;
+      padding: 50px 35px 45px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @media (max-width: 576px) {
+      .card {
+        padding: 35px 20px 35px;
+      }
+    }
+
+    /* Card Border Ornaments */
+    .card-ornament-corner {
+      position: absolute;
+      width: 45px;
+      height: 45px;
+      border-color: var(--gold-primary);
+      opacity: 0.7;
+    }
+    .corner-tl { top: 15px; left: 15px; border-top: 2px solid; border-left: 2px solid; }
+    .corner-tr { top: 15px; right: 15px; border-top: 2px solid; border-right: 2px solid; }
+    .corner-bl { bottom: 15px; left: 15px; border-bottom: 2px solid; border-left: 2px solid; }
+    .corner-br { bottom: 15px; right: 15px; border-bottom: 2px solid; border-right: 2px solid; }
+
+    /* Top Emblem & Badge */
+    .emblem-wrapper {
+      margin-bottom: 20px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .emblem-icon {
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(10, 33, 30, 0.8) 80%);
+      border: 1.5px solid var(--gold-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--gold-light);
+      margin: 0 auto;
+      box-shadow: var(--gold-glow);
+    }
+
+    .badge-sub {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--gold-light);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .header-calligraphy {
+      font-family: 'Alex Brush', cursive;
+      font-size: 3.2rem;
+      color: #fce69a;
+      line-height: 1.1;
+      margin-bottom: 5px;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    }
+
+    @media (max-width: 576px) {
+      .header-calligraphy {
+        font-size: 2.6rem;
+      }
+    }
+
+    .title-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      text-transform: capitalize;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 576px) {
+      .title-main {
+        font-size: 1.6rem;
+      }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px auto 25px;
+      width: 80%;
+      opacity: 0.7;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+    }
+    .divider i {
+      color: var(--gold-light);
+      font-size: 14px;
+    }
+
+    /* Core Invitation Message Box */
+    .invitation-quote-box {
+      background: rgba(15, 48, 42, 0.45);
+      border-left: 3px solid var(--gold-primary);
+      border-right: 3px solid var(--gold-primary);
+      border-radius: 12px;
+      padding: 24px 22px;
+      margin: 25px 0;
+      position: relative;
+    }
+
+    .invitation-quote-box p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #f7faf9;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    @media (max-width: 576px) {
+      .invitation-quote-box p {
+        font-size: 0.98rem;
+        line-height: 1.7;
+      }
+    }
+
+    .quote-mark {
+      color: var(--gold-primary);
+      opacity: 0.5;
+      font-size: 1.3rem;
+    }
+
+    /* Poetic stanza */
+    .poetic-line {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold-light);
+      font-size: 1.05rem;
+      margin-bottom: 25px;
+      opacity: 0.95;
+    }
+
+    /* Details Grid */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 30px 0 25px;
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .detail-card {
+      background: rgba(10, 31, 28, 0.75);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s;
+    }
+
+    .detail-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212, 175, 55, 0.6);
+      background: rgba(14, 43, 38, 0.85);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .detail-icon-box {
+      width: 44px;
+      height: 44px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .detail-text h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gold-primary);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .detail-text p {
+      font-size: 0.98rem;
+      color: var(--text-light);
+      font-weight: 500;
+      line-height: 1.45;
+    }
+
+    /* Organizer Highlight Banner */
+    .organizer-banner {
+      background: linear-gradient(90deg, rgba(15, 64, 57, 0.4) 0%, rgba(212, 175, 55, 0.15) 50%, rgba(15, 64, 57, 0.4) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin: 25px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .organizer-banner i {
+      color: var(--gold-light);
+      font-size: 22px;
+    }
+
+    .organizer-banner .org-info h5 {
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    .organizer-banner .org-info p {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Countdown Timer */
+    .timer-section {
+      margin: 35px 0 25px;
+    }
+
+    .timer-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .timer-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .timer-boxes {
+        gap: 8px;
+      }
+    }
+
+    .time-unit {
+      background: rgba(7, 24, 21, 0.9);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 12px;
+      min-width: 70px;
+      padding: 12px 6px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 480px) {
+      .time-unit {
+        min-width: 60px;
+        padding: 8px 4px;
+      }
+    }
+
+    .time-num {
+      font-size: 1.6rem;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .time-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    /* Actions buttons */
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 35px;
+    }
+
+    .btn-act {
+      background: rgba(14, 43, 38, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      color: var(--gold-light);
+      padding: 13px 24px;
+      border-radius: 30px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-act:hover {
+      background: var(--gold-gradient);
+      color: #241600;
+      border-color: transparent;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-act-primary {
+      background: var(--gold-gradient);
+      color: #241600;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 6px 20px rgba(191, 149, 63, 0.35);
+    }
+
+    .btn-act-primary:hover {
+      box-shadow: 0 10px 30px rgba(252, 246, 186, 0.6);
+      transform: translateY(-3px) scale(1.02);
+      color: #120a00;
+    }
+
+    /* Response Notification Modal */
+    .rsvp-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      padding: 20px;
+    }
+
+    .rsvp-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      background: linear-gradient(160deg, #0e302a 0%, #061917 100%);
+      border: 1.5px solid var(--gold-primary);
+      border-radius: 20px;
+      padding: 35px 25px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), var(--gold-glow);
+      transform: scale(0.85);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .rsvp-modal.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-box i.check-icon {
+      font-size: 45px;
+      color: #55e698;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+
+    .modal-box p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    /* Footer */
+    .card-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .card-footer span {
+      color: var(--gold-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Canvas for Floating Stardust -->
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="bg-ornament bg-ornament-1"></div>
+  <div class="bg-ornament bg-ornament-2"></div>
+
+  <!-- Audio Toggle Floating Button -->
+  <button class="audio-control" id="audioToggleBtn" title="Musiqani yoqish/o'chirish">
+    <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+  </button>
+
+  <!-- ================= ENVELOPE OPENING OVERLAY SCREEN ================= -->
+  <div class="envelope-screen" id="envelopeScreen">
+    
+    <div class="envelope-wrapper" id="envelopeCard" onclick="openInvitation()">
+      <div class="envelope-flaps">
+        <div class="envelope-flap-top"></div>
+      </div>
+      <div class="envelope-seal">
+        <i class="fa-solid fa-feather-pointed"></i>
+        <span>20-OKT</span>
+      </div>
+    </div>
+
+    <div class="envelope-title">
+      <h2>RASMIY TAKLIFNOMA</h2>
+      <p>Muhtaram ustoz, siz uchun maxsus xat</p>
+      <button class="open-btn" onclick="openInvitation()">
+        <i class="fa-solid fa-envelope-open"></i> Taklifnomani ochish
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ================= MAIN INVITATION CARD ================= -->
+  <main class="main-container" id="mainContainer">
+    <div class="card">
+      <!-- Ornaments in corners -->
+      <div class="card-ornament-corner corner-tl"></div>
+      <div class="card-ornament-corner corner-tr"></div>
+      <div class="card-ornament-corner corner-bl"></div>
+      <div class="card-ornament-corner corner-br"></div>
+
+      <!-- Top Emblem -->
+      <div class="emblem-wrapper">
+        <div class="emblem-icon">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+      </div>
+
+      <div>
+        <span class="badge-sub">Ona tili — millat g'ururi</span>
+      </div>
+
+      <h3 class="header-calligraphy">Badiiy Kechaga Taklifnoma</h3>
+      <h1 class="title-main">«Muqaddasim, munavvarim, ona tilim»</h1>
+
+      <div class="divider">
+        <i class="fa-solid fa-star"></i>
+      </div>
+
+      <!-- Poetic & Scene Highlights -->
+      <p class="poetic-line">
+        «Ona tilim — jon-u dilim, sen borsan-ki barhayot tilim...»
+      </p>
+
+      <!-- Main Official Text -->
+      <div class="invitation-quote-box">
+        <p>
+          <span class="quote-mark">“</span>
+          <strong>Assalomu alaykum, hurmatli ustozlar!</strong><br>
+          Barchangizni ertaga, <strong>20-oktabr soat 11:00 da</strong> 
+          <em>«Muqaddasim, munavvarim, ona tilim»</em> mavzusida o'tkazilayotgan 
+          badiiy kechamiz hamda <strong>maxsus sahna ko'rinishimizga</strong> lutfan taklif etamiz.
+          <span class="quote-mark">”</span>
+        </p>
+      </div>
+
+      <!-- Scene / Program Highlight -->
+      <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 15px 20px; margin-bottom: 25px; text-align: center;">
+        <div style="color: var(--gold-light); font-size: 0.95rem; font-weight: 600; margin-bottom: 4px;">
+          🎭 Dasturda: Maxsus sahna ko'rinishi, ifodali she'riy chiqishlar va adabiy kompozitsiya
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+          Iqtidorli o'quvchilar ijrosida ona tilimiz sharafiga bag'ishlangan ta'sirli sahnalar
+        </div>
+      </div>
+
+      <!-- Event Details Grid -->
+      <div class="details-grid">
+        
+        <!-- Date -->
+        <div class="detail-card">
+          <div class="detail-icon-box">
+            <i class="fa-regular fa-calendar-check"></i>
+          </div>
+          <div class="detail-text">
+            <h4>Tadbir sanasi</h4>
+            <p><strong>20-oktabr, 2026-yil</strong><br>Dushanba kuni</p>
+          </div>
+        </div>
+
+        <!-- Time -->
+        <div class="detail-card">
+          <div class="detail-icon-box">
+            <i class="fa-regular fa-clock"></i>
+          </div>
+          <div class="detail-text">
+            <h4>Boshlanish vaqti</h4>
+            <p><strong>Soat 11:00 da</strong><br>Iltimos, o'z vaqtida tashrif buyuring</p>
+          </div>
+        </div>
+
+        <!-- Venue / Address -->
+        <div class="detail-card" style="grid-column: 1 / -1;">
+          <div class="detail-icon-box">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <div class="detail-text" style="flex: 1;">
+            <h4>Tadbir o'tkazilish manzili</h4>
+            <p><strong>Gurlan tumani, 24-umumiy o'rta ta'lim maktabi</strong><br>Maktab faollar zali</p>
+          </div>
+          <a href="https://maps.google.com/?q=Gurlan+tumani+24-maktab" target="_blank" style="align-self: center; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); color: var(--gold-light); padding: 8px 14px; border-radius: 20px; font-size: 0.8rem; text-decoration: none; font-weight: 600; white-space: nowrap; transition: 0.3s;">
+            <i class="fa-solid fa-diamond-turn-right"></i> Xaritada
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Organizer Highlight -->
+      <div class="organizer-banner">
+        <i class="fa-solid fa-award"></i>
+        <div class="org-info">
+          <h5>Tashkiliy guruh & Rahbar</h5>
+          <p>Aminova Dilnoza va tashkiliy guruh</p>
+        </div>
+      </div>
+
+      <!-- Countdown Timer Section -->
+      <div class="timer-section">
+        <div class="timer-title">
+          <i class="fa-solid fa-hourglass-half"></i> Boshlanishiga qadar qolgan vaqt:
+        </div>
+        <div class="timer-boxes">
+          <div class="time-unit">
+            <div class="time-num" id="hours">00</div>
+            <div class="time-label">Soat</div>
+          </div>
+          <div class="time-unit">
+            <div class="time-num" id="minutes">00</div>
+            <div class="time-label">Daqiqa</div>
+          </div>
+          <div class="time-unit">
+            <div class="time-num" id="seconds">00</div>
+            <div class="time-label">Soniya</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Actions -->
+      <div class="action-buttons">
+        <button class="btn-act btn-act-primary" onclick="confirmAttendance()">
+          <i class="fa-solid fa-circle-check"></i> Albatta boraman
+        </button>
+
+        <button class="btn-act" onclick="addToCalendar()">
+          <i class="fa-solid fa-calendar-plus"></i> Kalendarga qo'shish
+        </button>
+
+        <a class="btn-act" href="https://t.me/share/url?url=https%3A%2F%2Ftaklifnoma-ona-tili.uz&text=Hurmatli%20ustozlar!%20Barchangizni%20ertaga,%2020-oktabr%20soat%2011:00%20da%20Muqaddasim,%20munavvarim,%20ona%20tilim%20badiiy%20kechasiga%20taklif%20etamiz!" target="_blank">
+          <i class="fa-brands fa-telegram"></i> Ulashish
+        </a>
+      </div>
+
+      <div class="card-footer">
+        Barcha ustoz va mehmonlarimizni sharaf bilan kutib qolamiz! <br>
+        <span>24-maktab ma'muriyati va ijodiy jamoasi</span>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Response Modal Dialog -->
+  <div class="rsvp-modal" id="rsvpModal" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <i class="fa-solid fa-circle-check check-icon"></i>
+      <h3>Tashrifingizdan mamnunmiz!</h3>
+      <p>
+        Hurmatli ustoz, taklifimizni qabul qilganingiz biz uchun katta sharaf va quvonch! Sizni ertaga soat 11:00 da orziqib kutib qolamiz.
+      </p>
+      <button class="open-btn" style="margin-top:0;" onclick="closeModal()">
+        Katta rahmat!
+      </button>
+    </div>
+  </div>
+
+  <!-- Music Synthesizer & Logic Scripts -->
+  <script>
+    // --- 1. Ambient Background Audio Generator (Web Audio API) ---
+    // Creates warm, pleasant acoustic harp / ambient chord progressions suitable for poetry night
+    let audioCtx = null;
+    let isPlaying = false;
+    let audioInterval = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Melodic notes in pentatonic/oriental calming scale (F, G, Bb, C, D, F, G)
+    const melodyNotes = [
+      174.61, 220.00, 261.63, 293.66, 349.23, 392.00, 440.00, 523.25, 587.33, 698.46
+    ];
+
+    function playNote(freq, delay = 0, duration = 3.5) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+      // Warm overtone
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 0.5, audioCtx.currentTime + delay);
+
+      const gain2 = audioCtx.createGain();
+      gain2.gain.setValueAtTime(0.04, audioCtx.currentTime + delay);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + delay + duration);
+
+      gain.gain.setValueAtTime(0.07, audioCtx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + delay + duration);
+
+      osc.connect(gain);
+      osc2.connect(gain2);
+
+      gain.connect(audioCtx.destination);
+      gain2.connect(audioCtx.destination);
+
+      osc.start(audioCtx.currentTime + delay);
+      osc2.start(audioCtx.currentTime + delay);
+
+      osc.stop(audioCtx.currentTime + delay + duration);
+      osc2.stop(audioCtx.currentTime + delay + duration);
+    }
+
+    function playMelodyLoop() {
+      const chords = [
+        [174.61, 261.63, 349.23, 523.25], // F major chord
+        [196.00, 293.66, 392.00, 587.33], // G minor chord
+        [220.00, 261.63, 349.23, 440.00], // D minor/F
+        [164.81, 246.94, 329.63, 493.88]  // E minor chord
+      ];
+
+      let chordIndex = 0;
+      function nextChord() {
+        if (!isPlaying) return;
+        const currentChord = chords[chordIndex % chords.length];
+        currentChord.forEach((note, idx) => {
+          playNote(note, idx * 0.18, 4.0);
+        });
+
+        // Add gentle decorative bell notes
+        setTimeout(() => {
+          if (isPlaying) {
+            const randomNote = melodyNotes[Math.floor(Math.random() * melodyNotes.length)];
+            playNote(randomNote, 0, 3.0);
+          }
+        }, 1200);
+
+        chordIndex++;
+      }
+
+      nextChord();
+      audioInterval = setInterval(nextChord, 3800);
+    }
+
+    function toggleAudio() {
+      initAudio();
+      const icon = document.getElementById('audioIcon');
+      const btn = document.getElementById('audioToggleBtn');
+
+      if (!isPlaying) {
+        isPlaying = true;
+        playMelodyLoop();
+        icon.className = 'fa-solid fa-volume-high';
+        btn.classList.add('playing');
+      } else {
+        isPlaying = false;
+        clearInterval(audioInterval);
+        icon.className = 'fa-solid fa-volume-xmark';
+        btn.classList.remove('playing');
+      }
+    }
+
+    document.getElementById('audioToggleBtn').addEventListener('click', toggleAudio);
+
+
+    // --- 2. Interactive Opening Sequence & Confetti ---
+    function openInvitation() {
+      // Start soothing music
+      if (!isPlaying) {
+        toggleAudio();
+      }
+
+      // Hide envelope overlay
+      const screen = document.getElementById('envelopeScreen');
+      screen.classList.add('hidden');
+
+      // Show Main Card
+      const container = document.getElementById('mainContainer');
+      container.classList.add('show');
+
+      // Trigger Celebration Confetti
+      fireCelebrationConfetti();
+    }
+
+    function fireCelebrationConfetti() {
+      const count = 200;
+      const defaults = {
+        origin: { y: 0.65 }
+      };
+
+      function fire(particleRatio, opts) {
+        confetti(Object.assign({}, defaults, opts, {
+          particleCount: Math.floor(count * particleRatio)
+        }));
+      }
+
+      fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+        colors: ['#d4af37', '#fcf6ba', '#ffffff']
+      });
+      fire(0.2, {
+        spread: 60,
+        colors: ['#0f4039', '#55e698', '#d4af37']
+      });
+      fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 0.8,
+        colors: ['#bf953f', '#fbf5b7', '#aa771c']
+      });
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.2,
+        colors: ['#ffffff', '#f4d269']
+      });
+    }
+
+    // --- 3. Countdown Timer (To Tomorrow 20-Oct 11:00 AM) ---
+    function updateCountdown() {
+      const now = new Date();
+      // Target tomorrow at 11:00 AM
+      let target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 11, 0, 0);
+
+      // If user specified 20th October:
+      const targetSpecific = new Date(now.getFullYear(), 9, 20, 11, 0, 0); // Month is 0-indexed (9 = Oct)
+      if (targetSpecific > now) {
+        target = targetSpecific;
+      }
+
+      const diff = target - now;
+
+      if (diff > 0) {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+      } else {
+        document.getElementById('hours').innerText = '00';
+        document.getElementById('minutes').innerText = '00';
+        document.getElementById('seconds').innerText = '00';
+      }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // --- 4. Canvas Floating Golden Dust / Stardust ---
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2.2 + 0.5;
+        this.speedY = -(Math.random() * 0.4 + 0.15);
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.alpha = Math.random() * 0.7 + 0.2;
+        this.alphaSpeed = Math.random() * 0.008 + 0.004;
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.alpha += this.alphaSpeed;
+
+        if (this.alpha > 0.85 || this.alpha < 0.15) {
+          this.alphaSpeed = -this.alphaSpeed;
+        }
+
+        if (this.y < 0 || this.x < 0 || this.x > canvas.width) {
+          this.reset();
+          this.y = canvas.height + 10;
+        }
+      }
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(247, 224, 137, ${this.alpha})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = 'rgba(212, 175, 55, 0.7)';
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 45; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // --- 5. Interactive Actions (RSVP, Calendar) ---
+    function confirmAttendance() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      document.getElementById('rsvpModal').classList.add('active');
+    }
+
+    function closeModal(e) {
+      document.getElementById('rsvpModal').classList.remove('active');
+    }
+
+    function addToCalendar() {
+      const now = new Date();
+      const eventStart = new Date(now.getFullYear(), 9, 20, 11, 0, 0);
+      const eventEnd = new Date(now.getFullYear(), 9, 20, 13, 0, 0);
+
+      const title = encodeURIComponent("«Muqaddasim, munavvarim, ona tilim» badiiy kechasi");
+      const details = encodeURIComponent("Assalomu alaykum! Gurlan tumani 24-maktab faollar zalida ona tilimizga bag'ishlangan badiiy kechamiz.");
+      const location = encodeURIComponent("Gurlan tumani 24-umumiy o'rta ta'lim maktabi faollar zali");
+
+      function formatCalDate(d) {
+        return d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+      }
+
+      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${formatCalDate(eventStart)}/${formatCalDate(eventEnd)}&details=${details}&location=${location}`;
+      window.open(googleCalUrl, '_blank');
+    }
+  </script>
+</body>
+</html>

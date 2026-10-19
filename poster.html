@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Taklifnoma Poster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@600;700;900&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #03110f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Poster container formatted ideally for phone / Telegram picture (ratio 4:5 or 9:16) */
+    .poster-card {
+      width: 800px;
+      background: radial-gradient(circle at 50% 20%, #0d3831 0%, #061c18 70%, #03110f 100%);
+      border: 3px solid #d4af37;
+      border-radius: 28px;
+      padding: 55px 45px 45px;
+      position: relative;
+      text-align: center;
+      color: #f5f7f6;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8), inset 0 0 50px rgba(212, 175, 55, 0.15);
+      overflow: hidden;
+    }
+
+    /* Outer golden double border */
+    .poster-card::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      border: 1px solid rgba(247, 224, 137, 0.4);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    /* Corner Luxury Ornaments */
+    .ornament {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-color: #d4af37;
+    }
+    .c-tl { top: 22px; left: 22px; border-top: 3px solid; border-left: 3px solid; }
+    .c-tr { top: 22px; right: 22px; border-top: 3px solid; border-right: 3px solid; }
+    .c-bl { bottom: 22px; left: 22px; border-bottom: 3px solid; border-left: 3px solid; }
+    .c-br { bottom: 22px; right: 22px; border-bottom: 3px solid; border-right: 3px solid; }
+
+    /* Top Emblem */
+    .emblem {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(10, 36, 31, 0.9) 75%);
+      border: 2px solid #fce69a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fce69a;
+      font-size: 32px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      color: #f7e089;
+      padding: 6px 22px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .cursive-subtitle {
+      font-family: 'Alex Brush', cursive;
+      font-size: 3.4rem;
+      color: #fdf0ba;
+      line-height: 1;
+      margin-bottom: 5px;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .main-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      line-height: 1.3;
+      background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      width: 60%;
+      margin: 0 auto 20px;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    }
+    .divider i {
+      color: #f7e089;
+      font-size: 16px;
+    }
+
+    .quote-box {
+      background: rgba(9, 36, 31, 0.65);
+      border-left: 3px solid #d4af37;
+      border-right: 3px solid #d4af37;
+      border-radius: 16px;
+      padding: 24px 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .quote-box p {
+      font-size: 1.15rem;
+      line-height: 1.85;
+      color: #ffffff;
+      font-weight: 400;
+    }
+
+    .quote-box p strong {
+      color: #fdf0ba;
+    }
+
+    /* Program Highlights */
+    .scene-box {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.18) 50%, rgba(212, 175, 55, 0.08) 100%);
+      border: 1px dashed rgba(212, 175, 55, 0.5);
+      border-radius: 14px;
+      padding: 14px 20px;
+      margin-bottom: 25px;
+    }
+
+    .scene-box h4 {
+      color: #f7e089;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .scene-box p {
+      font-size: 0.9rem;
+      color: #cbdad5;
+    }
+
+    /* Info Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .info-item {
+      background: rgba(6, 26, 23, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .info-item i {
+      font-size: 26px;
+      color: #f7e089;
+      width: 32px;
+      text-align: center;
+    }
+
+    .info-item .txt h5 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #d4af37;
+      margin-bottom: 3px;
+    }
+
+    .info-item .txt p {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* Organizer Banner */
+    .organizer-card {
+      background: linear-gradient(135deg, rgba(16, 66, 58, 0.7) 0%, rgba(8, 33, 29, 0.8) 100%);
+      border: 1.5px solid rgba(212, 175, 55, 0.4);
+      border-radius: 16px;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .organizer-card i {
+      font-size: 28px;
+      color: #f7e089;
+    }
+
+    .organizer-card .org-txt h5 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #d4af37;
+    }
+
+    .organizer-card .org-txt p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .footer-note {
+      font-size: 0.95rem;
+      color: #cbdad5;
+      line-height: 1.6;
+    }
+
+    .footer-note span {
+      color: #f7e089;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster-card" id="poster">
+    <div class="ornament c-tl"></div>
+    <div class="ornament c-tr"></div>
+    <div class="ornament c-bl"></div>
+    <div class="ornament c-br"></div>
+
+    <div class="emblem">
+      <i class="fa-solid fa-book-open-reader"></i>
+    </div>
+
+    <div>
+      <span class="badge">Ona tili — millat g'ururi</span>
+    </div>
+
+    <h2 class="cursive-subtitle">Badiiy Kechaga Taklifnoma</h2>
+    <h1 class="main-title">«Muqaddasim, munavvarim, ona tilim»</h1>
+
+    <div class="divider">
+      <i class="fa-solid fa-star"></i>
+    </div>
+
+    <div class="quote-box">
+      <p>
+        <strong>Assalomu alaykum, hurmatli ustozlar!</strong><br>
+        Barchangizni ertaga, <strong>20-oktabr soat 11:00 da</strong> 
+        <em>«Muqaddasim, munavvarim, ona tilim»</em> mavzusida o'tkazilayotgan 
+        badiiy kechamiz hamda <strong>maxsus sahna ko'rinishimizga</strong> lutfan taklif etamiz.
+      </p>
+    </div>
+
+    <div class="scene-box">
+      <h4>🎭 Dasturda: Maxsus sahna ko'rinishi va adabiy-badiiy chiqishlar</h4>
+      <p>O'quvchilarimiz ijrosida ona tilimizga bag'ishlangan ifodali va ta'sirli kompozitsiya</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <i class="fa-regular fa-calendar-check"></i>
+        <div class="txt">
+          <h5>Tadbir sanasi</h5>
+          <p>20-oktabr, 2026-yil</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <i class="fa-regular fa-clock"></i>
+        <div class="txt">
+          <h5>Boshlanish vaqti</h5>
+          <p>Soat 11:00 da</p>
+        </div>
+      </div>
+
+      <div class="info-item full-width">
+        <i class="fa-solid fa-location-dot"></i>
+        <div class="txt">
+          <h5>Tadbir o'tkazilish joyi</h5>
+          <p>Gurlan tumani, 24-umumiy o'rta ta'lim maktabi faollar zali</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="organizer-card">
+      <i class="fa-solid fa-award"></i>
+      <div class="org-txt">
+        <h5>Tashkiliy guruh & Rahbar</h5>
+        <p>Aminova Dilnoza va ijodiy jamoa</p>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Barcha ustoz va mehmonlarimizni yuksak ehtirom bilan kutib qolamiz!<br>
+      <span>24-maktab ma'muriyati va ijodiy o'quvchilar jamoasi</span>
+    </div>
+  </div>
+
+</body>
+</html>
